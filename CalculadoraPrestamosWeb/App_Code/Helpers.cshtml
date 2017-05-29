@@ -1,0 +1,48 @@
+﻿@helper IngresarDatosTabla(float p,float t, float c,short m) {
+float prestamo = (float)p;
+float taza = t;
+float cuota = c;
+short meses = m;
+float interes = 0;
+float amortizacion = 0;
+
+
+for (int i = 0; i < meses + 1; i++)
+{
+    if (i == 0)
+    {
+            <tr>
+                <td>@i</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>@prestamo</td>
+            </tr>
+    }
+    else
+    {
+        interes = prestamo * taza;
+        amortizacion = cuota - interes;
+        prestamo -= amortizacion;
+        prestamo = (float)Math.Round(prestamo, 2);
+        if(prestamo < 0)
+        {
+                prestamo = 0.00f;
+        }
+
+
+
+            <tr>
+                <td>@i</td>
+                <td>@cuota.ToString("0.00")</td>
+                <td>@Math.Round(interes)</td>
+                <td>@amortizacion.ToString("0.00")</td>
+                <td>@prestamo.ToString("0.00")</td>
+            </tr>
+    }
+
+
+
+}
+
+}

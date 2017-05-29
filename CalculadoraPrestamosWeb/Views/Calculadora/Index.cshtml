@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+@{
+        float prestamo = 0f;
+        float interes = 0f;
+        float taza = 0f;
+        float totalPagar = 0f;
+        float cuota = 0f;
+        short meses = 0;
+        string test = string.Empty;
+        if (IsPost)
+        {
+            prestamo = (float)Convert.ToDecimal(Request["txtPrestamo"]);
+            meses = (short)Convert.ToDecimal(Request["txtMeses"]);
+            taza = ((float)Convert.ToDecimal(Request["txtTaza"])) / 100;
+
+            cuota = (float)((prestamo * (taza * Math.Pow(taza + 1, meses))) / (Math.Pow(1 + taza, meses) - 1));
+            totalPagar = (float)Math.Round(cuota * meses, 2);
+            interes = totalPagar - prestamo;
+        }
+
+        
+
+}
+
+<div class="container" id="mainContainer">
+    <div class="row">
+        <div class="col-md-4">
+            <form action="" method="post">
+                <div class="form-group">
+                    <label for="txtPrestamo">Prestamo:</label>
+                    <input name="txtPrestamo" type="number" class="form-control" min="0" max="99999" />
+                </div>
+                <div class="form-group">
+                    <label for="txtMeses">Meses:</label>
+                    <input name="txtMeses" class="form-control" type="number" min="0" max="120"/>
+                </div>
+                <div class="form-group">
+                    <label for="txtTaza">Taza de Interes:</label>
+                    <input name="txtTaza" class="form-control" type="number" min="0" />
+                </div>
+                <button type="submit" class="btn btn-primary">Calcular</button>
+            </form>
+        </div>
+        <div class="col-md-3" style="margin-top: 20px;">
+            <h4>Monto total a pagar: RD$ @totalPagar</h4>
+            <h4>Cuota mensual: RD$ @cuota</h4>
+            <h4>Total Intereses: RD$  </h4>
+        </div>
+        <div class="col-md-5" style="overflow-y:scroll; max-height:300px;" >
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Cuota</th>
+                        <th>Interes</th>
+                        <th>Amortizacion</th>
+                        <th>Saldo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ if (IsPost)
+                        {
+                            @Helpers.IngresarDatosTabla(prestamo, taza, cuota, meses);
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
